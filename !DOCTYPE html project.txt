@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rupee Bank · complete dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #e9f0fc 0%, #f1f7ff 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .bank-wrapper {
+            width: 100%;
+            max-width: 1600px;
+            border-radius: 2.5rem;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 25px 50px -12px rgba(0, 20, 60, 0.25), inset 0 1px 2px rgba(255,255,255,0.6);
+            padding: 2rem;
+        }
+        .login-container {
+            max-width: 440px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -15px rgba(0, 35, 80, 0.2);
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-header .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0a2b5e, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .login-header .logo i {
+            background: none;
+            -webkit-text-fill-color: #2563eb;
+            margin-right: 0.3rem;
+        }
+        .login-header p {
+            color: #4b587c;
+            font-weight: 500;
+            margin-top: 0.3rem;
+        }
+        .input-field {
+            margin-bottom: 1.4rem;
+        }
+        .input-field label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+        .input-field input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: #f8faff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 1.2rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+        .input-field input:focus {
+            border-color: #2563eb;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+        }
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(105deg, #1e3c72, #2a5298);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 1rem;
+            border: none;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -8px #1e3c7250;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+        .btn-login:hover {
+            background: linear-gradient(105deg, #163458, #1f3f7a);
+            transform: scale(1.02);
+        }
+        .demo-note {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #6f7c9f;
+            margin-top: 1.8rem;
+            background: #f0f4fe;
+            padding: 0.7rem;
+            border-radius: 1.5rem;
+        }
+        .dashboard-container {
+            display: none;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            padding: 0.8rem 1.8rem;
+            border-radius: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 18px -6px rgba(0,30,60,0.12);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .logo-dash {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(145deg, #0b2d5e, #2563eb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .user-email {
+            background: #ffffffd9;
+            padding: 0.5rem 1.3rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            color: #0b2d5e;
+            box-shadow: inset 0 1px 3px #cbd5e1;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .user-email i {
+            color: #2563eb;
+        }
+        .logout-btn {
+            background: white;
+            border: 1px solid #dce5f0;
+            color: #1e293b;
+            font-weight: 600;
+            padding: 0.6rem 1.4rem;
+            border-radius: 2.5rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 8px -6px #0b2d5e;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logout-btn:hover {
+            background: #fee2e2;
+            border-color: #f87171;
+            color: #b91c1c;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.5rem 1.4rem;
+            box-shadow: 0 10px 25px -15px #0b2d5e33;
+            border: 1px solid rgba(255,255,255,0.7);
+            transition: transform 0.15s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #122b4e;
+        }
+        .card-title i {
+            color: #2563eb;
+            font-size: 1.4rem;
+        }
+        .balance-large {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #0a2b5e;
+            margin: 0.5rem 0 0.2rem;
+        }
+        .accent-text {
+            color: #4b587c;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-bottom: 1px dashed #b9ccf0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+            padding: 0.65rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-outline:hover {
+            background: #2563eb;
+            color: white;
+        }
+        .btn-solid {
+            background: linear-gradient(115deg, #1e3c72, #2563eb);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.2rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: 0.15s;
+            width: 100%;
+            font-size: 0.95rem;
+            box-shadow: 0 6px 14px -6px #1e3c72;
+        }
+        .btn-solid:hover {
+            background: linear-gradient(115deg, #163458, #1d4ed8);
+        }
+        .pin-row {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0.8rem 0;
+            align-items: center;
+        }
+        .pin-row input, .pin-row select {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 1.8rem;
+            outline: none;
+            background: #fcfdff;
+            font-size: 0.9rem;
+        }
+        .pin-row input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px #93c5fd;
+        }
+        .history-list {
+            list-style: none;
+            max-height: 170px;
+            overflow-y: auto;
+            padding-right: 0.3rem;
+        }
+        .history-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0.3rem;
+            border-bottom: 1px solid #e9eff8;
+            font-size: 0.95rem;
+        }
+        .history-list .amount-positive { color: #0e7b32; font-weight: 600; }
+        .history-list .amount-negative { color: #b91c1c; font-weight: 600; }
+
+        .gmail-tag {
+            background: #e6edfc;
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0.2rem 0.2rem 0 0;
+            font-size: 0.9rem;
+            border: 1px solid #bbcff2;
+        }
+        .gmail-tag i {
+            color: #d44638;
+        }
+        .gmail-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.8rem 0;
+        }
+        .add-gmail {
+            display: flex;
+            gap: 0.3rem;
+            margin-top: 0.8rem;
+        }
+        .add-gmail input {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border-radius: 2rem;
+            border: 1px solid #cbd5e1;
+            background: white;
+        }
+
+        /* Profile editing styles */
+        .profile-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        .profile-detail i {
+            width: 1.8rem;
+            color: #2563eb;
+        }
+        .profile-display, .profile-edit {
+            width: 100%;
+        }
+        .profile-edit input {
+            width: 100%;
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .profile-edit .btn-small {
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        .notif-badge {
+            background: #2563eb10;
+            border-radius: 1rem;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.8rem;
+            color: #2563eb;
+            border: 1px solid #2563eb30;
+            cursor: pointer;
+            margin-left: 0.3rem;
+        }
+        .mini-statement-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #e2e8f0;
+            padding: 0.4rem 0;
+            font-size: 0.95rem;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 2rem;
+            color: #4d6385;
+            font-size: 0.9rem;
+        }
+        @media (min-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="bank-wrapper">
+    <!-- LOGIN SECTION -->
+    <div id="loginSection" class="login-container">
+        <div class="login-header">
+            <div class="logo"><i class="fas fa-indian-rupee-sign"></i> Rupee Bank</div>
+            <p>secure • simple • modern</p>
+        </div>
+        <div class="input-field">
+            <label><i class="far fa-envelope"></i> Gmail address</label>
+            <input type="email" id="loginEmail" placeholder="you@gmail.com" value="demo.user@gmail.com">
+        </div>
+        <div class="input-field">
+            <label><i class="fas fa-lock"></i> 6-digit PIN</label>
+            <input type="password" maxlength="6" id="loginPin" placeholder="••••••" value="123456">
+        </div>
+        <button class="btn-login" id="loginBtn"><i class="fas fa-arrow-right-to-bracket"></i> Login to dashboard</button>
+        <div class="demo-note"><i class="fas fa-flask"></i> demo: any Gmail / 123456 works</div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboardSection" class="dashboard-container">
+        <!-- navbar -->
+        <div class="navbar">
+            <span class="logo-dash"><i class="fas fa-indian-rupee-sign"></i> Rupee Bank</span>
+            <div class="user-area">
+                <span class="user-email" id="displayUserEmail"><i class="far fa-envelope"></i> demo.user@gmail.com</span>
+                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <!-- main dashboard grid -->
+        <div class="dashboard-grid">
+            <!-- Account summary -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-wallet"></i> Account summary</div>
+                <div class="balance-large" id="balanceDisplay">₹ 48,750.00</div>
+                <div class="accent-text"><i class="far fa-credit-card"></i> **** 3421 · since 2022</div>
+                <button class="btn-outline" id="checkBalanceBtn" style="margin-top:0.8rem;"><i class="fas fa-eye"></i> check balance</button>
+            </div>
+
+            <!-- Profile card with inline editing -->
+            <div class="card" id="profileCard">
+                <div class="card-title"><i class="fas fa-id-card"></i> Profile</div>
+                <div id="profileDisplay" class="profile-display">
+                    <div class="profile-detail"><i class="fas fa-user"></i> <span id="profName">Rajesh Kumar</span></div>
+                    <div class="profile-detail"><i class="fas fa-envelope"></i> <span id="profEmail">rajesh.k@rupee.com</span></div>
+                    <div class="profile-detail"><i class="fas fa-phone"></i> <span id="profPhone">+91 98765 43210</span></div>
+                    <div class="profile-detail"><i class="fas fa-map-marker-alt"></i> <span id="profLocation">Mumbai, India</span></div>
+                    <button class="btn-outline" id="editProfileBtn" style="width:100%;"><i class="fas fa-pen"></i> edit profile</button>
+                </div>
+                <div id="profileEdit" class="profile-edit" style="display:none;">
+                    <input type="text" id="editName" placeholder="Full Name" value="Rajesh Kumar">
+                    <input type="email" id="editEmail" placeholder="Email" value="rajesh.k@rupee.com">
+                    <input type="text" id="editPhone" placeholder="Phone" value="+91 98765 43210">
+                    <input type="text" id="editLocation" placeholder="Location" value="Mumbai, India">
+                    <div style="display:flex; gap:0.5rem; margin-top:0.8rem;">
+                        <button class="btn-solid btn-small" id="saveProfileBtn" style="padding:0.5rem;">Save</button>
+                        <button class="btn-outline btn-small" id="cancelProfileBtn" style="padding:0.5rem;">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini statement card (straight, no refresh) -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-receipt"></i> Mini statement (last 3)</div>
+                <div id="miniStatementList" class="mini-statement-item">
+                    <!-- dynamically filled -->
+                </div>
+            </div>
+
+            <!-- Deposit -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-arrow-down"></i> Deposit</div>
+                <div class="pin-row"><input type="number" placeholder="amount (₹)" id="depositAmount"></div>
+                <div class="pin-row"><input type="password" maxlength="6" placeholder="enter PIN" id="depositPin"></div>
+                <button class="btn-solid" id="depositBtn"><i class="fas fa-circle-plus"></i> deposit</button>
+            </div>
+
+            <!-- Withdraw -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-arrow-up"></i> Withdraw</div>
+                <div class="pin-row"><input type="number" placeholder="amount (₹)" id="withdrawAmount"></div>
+                <div class="pin-row"><input type="password" maxlength="6" placeholder="enter PIN" id="withdrawPin"></div>
+                <button class="btn-solid" id="withdrawBtn"><i class="fas fa-circle-minus"></i> withdraw</button>
+            </div>
+
+            <!-- Money transfer -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-money-bill-transfer"></i> Money transfer</div>
+                <div class="pin-row"><input type="text" placeholder="account / UPI ID" id="transferAccount"></div>
+                <div class="pin-row"><input type="number" placeholder="amount (₹)" id="transferAmount"></div>
+                <div class="pin-row"><input type="password" maxlength="6" placeholder="enter PIN" id="transferPin"></div>
+                <button class="btn-solid" id="transferBtn"><i class="fas fa-paper-plane"></i> transfer</button>
+            </div>
+
+            <!-- PIN change -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-key"></i> PIN change</div>
+                <div class="pin-row"><input type="password" maxlength="6" placeholder="new PIN" id="newPin1"></div>
+                <div class="pin-row"><input type="password" maxlength="6" placeholder="confirm PIN" id="newPin2"></div>
+                <button class="btn-solid" id="generatePinBtn"><i class="fas fa-sync-alt"></i> change PIN</button>
+            </div>
+
+            <!-- Transaction history -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-clock-rotate-left"></i> Transaction history</div>
+                <ul class="history-list" id="transactionList"></ul>
+            </div>
+
+            <!-- Email notifications -->
+            <div class="card">
+                <div class="card-title"><i class="far fa-envelope"></i> Email notifications</div>
+                <div class="gmail-list" id="gmailListContainer">
+                    <span class="gmail-tag"><i class="fab fa-google"></i> contact.rupee@gmail.com <span class="notif-badge" data-email="contact.rupee@gmail.com">🔔 on</span></span>
+                    <span class="gmail-tag"><i class="fab fa-google"></i> support@rupeebank.demo <span class="notif-badge" data-email="support@rupeebank.demo">🔔 on</span></span>
+                    <span class="gmail-tag"><i class="fab fa-google"></i> demo.user@gmail.com <span class="notif-badge" data-email="demo.user@gmail.com">🔔 on</span></span>
+                </div>
+                <div class="add-gmail">
+                    <input type="email" placeholder="add new gmail" id="newGmailInput">
+                    <button class="btn-outline" id="addGmailBtn"><i class="fas fa-plus"></i></button>
+                </div>
+                <p style="font-size:0.8rem; margin-top:8px;"><i class="fas fa-bell"></i> click on badge to toggle</p>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            <i class="fas fa-laptop"></i> Rupee Bank · fully editable profile & straight mini statement
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- DOM elements -----
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const displayUserEmail = document.getElementById('displayUserEmail');
+        const loginEmail = document.getElementById('loginEmail');
+
+        // Profile elements
+        const profileDisplay = document.getElementById('profileDisplay');
+        const profileEdit = document.getElementById('profileEdit');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const cancelProfileBtn = document.getElementById('cancelProfileBtn');
+        const profName = document.getElementById('profName');
+        const profEmail = document.getElementById('profEmail');
+        const profPhone = document.getElementById('profPhone');
+        const profLocation = document.getElementById('profLocation');
+        const editName = document.getElementById('editName');
+        const editEmail = document.getElementById('editEmail');
+        const editPhone = document.getElementById('editPhone');
+        const editLocation = document.getElementById('editLocation');
+
+        // Other elements
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        const transactionList = document.getElementById('transactionList');
+        const miniStatementList = document.getElementById('miniStatementList');
+        const depositBtn = document.getElementById('depositBtn');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        const transferBtn = document.getElementById('transferBtn');
+        const checkBalanceBtn = document.getElementById('checkBalanceBtn');
+        const generatePinBtn = document.getElementById('generatePinBtn');
+        const addGmailBtn = document.getElementById('addGmailBtn');
+        const newGmailInput = document.getElementById('newGmailInput');
+        const gmailListContainer = document.getElementById('gmailListContainer');
+
+        const depositAmount = document.getElementById('depositAmount');
+        const depositPin = document.getElementById('depositPin');
+        const withdrawAmount = document.getElementById('withdrawAmount');
+        const withdrawPin = document.getElementById('withdrawPin');
+        const transferAccount = document.getElementById('transferAccount');
+        const transferAmount = document.getElementById('transferAmount');
+        const transferPin = document.getElementById('transferPin');
+        const newPin1 = document.getElementById('newPin1');
+        const newPin2 = document.getElementById('newPin2');
+
+        // ----- state -----
+        let currentBalance = 48750.00;
+        let currentPin = "123456";
+        let transactions = [
+            { description: "Deposit", amount: 12000, type: "credit" },
+            { description: "Withdrawal", amount: 2500, type: "debit" },
+            { description: "Deposit", amount: 5300, type: "credit" },
+            { description: "Bill payment", amount: 1200, type: "debit" },
+            { description: "Transfer to Priya", amount: 1850, type: "debit" },
+            { description: "Salary credit", amount: 35000, type: "credit" }
+        ];
+        let emailNotifications = {
+            'contact.rupee@gmail.com': true,
+            'support@rupeebank.demo': true,
+            'demo.user@gmail.com': true
+        };
+
+        // Helper functions
+        function formatBalance(bal) {
+            return '₹ ' + bal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
+        function updateBalanceUI() {
+            balanceDisplay.textContent = formatBalance(currentBalance);
+        }
+
+        function renderTransactions() {
+            transactionList.innerHTML = '';
+            [...transactions].reverse().forEach(t => {
+                const li = document.createElement('li');
+                const sign = t.type === 'credit' ? '+' : '-';
+                const amountClass = t.type === 'credit' ? 'amount-positive' : 'amount-negative';
+                li.innerHTML = `<span>${t.description}</span> <span class="${amountClass}">${sign}₹${t.amount.toFixed(2)}</span>`;
+                transactionList.appendChild(li);
+            });
+        }
+
+        function renderMiniStatement() {
+            miniStatementList.innerHTML = '';
+            const lastThree = [...transactions].reverse().slice(0, 3);
+            if (lastThree.length === 0) {
+                miniStatementList.innerHTML = '<div>No transactions</div>';
+                return;
+            }
+            lastThree.forEach(t => {
+                const div = document.createElement('div');
+                div.className = 'mini-statement-item';
+                const sign = t.type === 'credit' ? '+' : '-';
+                const amtClass = t.type === 'credit' ? 'amount-positive' : 'amount-negative';
+                div.innerHTML = `<span>${t.description}</span> <span class="${amtClass}">${sign}₹${t.amount.toFixed(2)}</span>`;
+                miniStatementList.appendChild(div);
+            });
+        }
+
+        function addTransaction(description, amount, type) {
+            transactions.push({ description, amount, type });
+            renderTransactions();
+            renderMiniStatement();
+        }
+
+        function validatePin(enteredPin) {
+            return enteredPin === currentPin;
+        }
+
+        // Profile editing
+        function enterEditMode() {
+            profileDisplay.style.display = 'none';
+            profileEdit.style.display = 'block';
+            editName.value = profName.textContent;
+            editEmail.value = profEmail.textContent;
+            editPhone.value = profPhone.textContent;
+            editLocation.value = profLocation.textContent;
+        }
+
+        function exitEditMode(save) {
+            if (save) {
+                profName.textContent = editName.value.trim() || profName.textContent;
+                profEmail.textContent = editEmail.value.trim() || profEmail.textContent;
+                profPhone.textContent = editPhone.value.trim() || profPhone.textContent;
+                profLocation.textContent = editLocation.value.trim() || profLocation.textContent;
+            }
+            profileDisplay.style.display = 'block';
+            profileEdit.style.display = 'none';
+        }
+
+        editProfileBtn.addEventListener('click', enterEditMode);
+        saveProfileBtn.addEventListener('click', () => exitEditMode(true));
+        cancelProfileBtn.addEventListener('click', () => exitEditMode(false));
+
+        // Badge toggle
+        function attachBadgeListeners() {
+            document.querySelectorAll('.notif-badge').forEach(badge => {
+                badge.removeEventListener('click', badge._handler);
+                const handler = function(e) {
+                    e.stopPropagation();
+                    const email = this.dataset.email;
+                    if (emailNotifications.hasOwnProperty(email)) {
+                        emailNotifications[email] = !emailNotifications[email];
+                        this.textContent = emailNotifications[email] ? '🔔 on' : '🔕 off';
+                    } else {
+                        emailNotifications[email] = true;
+                        this.textContent = '🔔 on';
+                    }
+                };
+                badge._handler = handler;
+                badge.addEventListener('click', handler);
+            });
+        }
+
+        // ----- login / logout -----
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            let email = loginEmail.value.trim() || 'demo.user@gmail.com';
+            displayUserEmail.innerHTML = `<i class="far fa-envelope"></i> ${email}`;
+            loginSection.style.display = 'none';
+            dashboardSection.style.display = 'block';
+            // Reset demo data
+            currentBalance = 48750.00;
+            currentPin = "123456";
+            transactions = [
+                { description: "Deposit", amount: 12000, type: "credit" },
+                { description: "Withdrawal", amount: 2500, type: "debit" },
+                { description: "Deposit", amount: 5300, type: "credit" },
+                { description: "Bill payment", amount: 1200, type: "debit" },
+                { description: "Transfer to Priya", amount: 1850, type: "debit" },
+                { description: "Salary credit", amount: 35000, type: "credit" }
+            ];
+            // Reset profile fields
+            profName.textContent = 'Rajesh Kumar';
+            profEmail.textContent = 'rajesh.k@rupee.com';
+            profPhone.textContent = '+91 98765 43210';
+            profLocation.textContent = 'Mumbai, India';
+            exitEditMode(false); // ensure display mode
+            updateBalanceUI();
+            renderTransactions();
+            renderMiniStatement();
+            // Clear inputs
+            depositAmount.value = ''; depositPin.value = '';
+            withdrawAmount.value = ''; withdrawPin.value = '';
+            transferAccount.value = ''; transferAmount.value = ''; transferPin.value = '';
+            newPin1.value = ''; newPin2.value = '';
+            attachBadgeListeners();
+        });
+
+        logoutBtn.addEventListener('click', function() {
+            dashboardSection.style.display = 'none';
+            loginSection.style.display = 'block';
+        });
+
+        // ----- check balance -----
+        checkBalanceBtn.addEventListener('click', () => alert(`💰 Current balance: ${formatBalance(currentBalance)}`));
+
+        // ----- deposit -----
+        depositBtn.addEventListener('click', function() {
+            const amount = parseFloat(depositAmount.value);
+            const pin = depositPin.value;
+            if (isNaN(amount) || amount <= 0) return alert('Enter valid amount');
+            if (!validatePin(pin)) return alert('❌ Incorrect PIN');
+            currentBalance += amount;
+            addTransaction('Deposit', amount, 'credit');
+            updateBalanceUI();
+            alert(`✅ Deposited ₹${amount.toFixed(2)}`);
+            depositAmount.value = ''; depositPin.value = '';
+        });
+
+        // ----- withdraw -----
+        withdrawBtn.addEventListener('click', function() {
+            const amount = parseFloat(withdrawAmount.value);
+            const pin = withdrawPin.value;
+            if (isNaN(amount) || amount <= 0) return alert('Enter valid amount');
+            if (!validatePin(pin)) return alert('❌ Incorrect PIN');
+            if (amount > currentBalance) return alert('❌ Insufficient balance');
+            currentBalance -= amount;
+            addTransaction('Withdrawal', amount, 'debit');
+            updateBalanceUI();
+            alert(`💸 Withdrawn ₹${amount.toFixed(2)}`);
+            withdrawAmount.value = ''; withdrawPin.value = '';
+        });
+
+        // ----- money transfer -----
+        transferBtn.addEventListener('click', function() {
+            const account = transferAccount.value.trim();
+            const amount = parseFloat(transferAmount.value);
+            const pin = transferPin.value;
+            if (!account) return alert('Please enter recipient account/UPI');
+            if (isNaN(amount) || amount <= 0) return alert('Enter valid amount');
+            if (!validatePin(pin)) return alert('❌ Incorrect PIN');
+            if (amount > currentBalance) return alert('❌ Insufficient balance');
+            currentBalance -= amount;
+            addTransaction(`Transfer to ${account.substring(0,8)}...`, amount, 'debit');
+            updateBalanceUI();
+            alert(`💸 Transferred ₹${amount.toFixed(2)} to ${account}`);
+            transferAccount.value = ''; transferAmount.value = ''; transferPin.value = '';
+        });
+
+        // ----- PIN change -----
+        generatePinBtn.addEventListener('click', function() {
+            const pin1 = newPin1.value;
+            const pin2 = newPin2.value;
+            if (pin1.length !== 6 || pin2.length !== 6) return alert('PIN must be 6 digits');
+            if (pin1 !== pin2) return alert('PINs do not match');
+            currentPin = pin1;
+            alert('✅ PIN changed successfully');
+            newPin1.value = ''; newPin2.value = '';
+        });
+
+        // ----- add Gmail & notification toggle -----
+        addGmailBtn.addEventListener('click', function() {
+            const newEmail = newGmailInput.value.trim();
+            if (!newEmail.includes('@') || !newEmail.includes('.')) return alert('Valid email required');
+            const span = document.createElement('span');
+            span.className = 'gmail-tag';
+            span.innerHTML = `<i class="fab fa-google"></i> ${newEmail} <span class="notif-badge" data-email="${newEmail}">🔔 on</span>`;
+            gmailListContainer.appendChild(span);
+            emailNotifications[newEmail] = true;
+            newGmailInput.value = '';
+            attachBadgeListeners();
+        });
+
+        // initial render
+        renderMiniStatement();
+        renderTransactions();
+        attachBadgeListeners();
+        dashboardSection.style.display = 'none';
+    })();
+</script>
+</body>
+</html>
